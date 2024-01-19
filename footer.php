@@ -43,7 +43,7 @@
 
 			<div class="copy">
 				<div class="container">
-					<p class="grid-16"><?php bloginfo('name'); ?> <?php echo date('Y'); ?> - Alguns direitos reservados.</p>
+					<p class="grid-16"><?php bloginfo('name'); ?> <?php echo date('Y'); ?> - Alguns direitos reservados - Feito por Millena Limaverde - Design por Origamid.</p>
 				</div>
 			</div>
 		</footer>
