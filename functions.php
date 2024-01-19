@@ -1,4 +1,3 @@
-
 <?php $contato = get_page_by_title('contato'); ?>
 
 		<style type="text/css">
