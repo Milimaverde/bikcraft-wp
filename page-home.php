@@ -2,89 +2,82 @@
 // Template Name: Home
 get_header();
 ?>
-<section class="introducao">
-<div class="container">
-  <h1>Bicicletas Feitas a Mão</h1>
-  <blockquote class="quote-externo">
-    <p>“não tenha nada em sua casa que você não considere útil ou acredita ser bonito”</p>
-    <cite>WILLIAM MORRIS</cite>
-  </blockquote>
-  <a href="produtos.html" class="btn">Orçamento</a>
-</div>
-</section>
 
-<section class="produtos container animar">
-<h2 class="subtitulo">Produtos</h2>
-<ul class="produtos_lista">
+<?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
 
-  <li class="grid-1-3">
-    <div class="produtos_icone">
-      <img src="img/produtos/passeio.png" alt="Bikcraft Passeio">
-    </div>
-    <h3>Passeio</h3>
-    <p>Muito melhor do que passear pela orla a vidros fechados.</p>
-  </li>
+<?php
+	$imagem_id = get_field('background_home');
+	$background_large = wp_get_attachment_image_src($imagem_id, 'large');
+	$background_medium = wp_get_attachment_image_src($imagem_id, 'medium');
+?>
 
-  <li class="grid-1-3">
-    <div class="produtos_icone">
-      <img src="img/produtos/esporte.png" alt="Bikcraft Esporte">
-    </div>
-    <h3>Esporte</h3>
-    <p>Mais rápida do que Forrest Gump, ninguém vai pegar você.</p>
-  </li>
+<style type="text/css">
+.introducao {
+	background: url('<?php echo $background_large[0] ?>') no-repeat center;
+	background-size: cover;
+}
+@media only screen and (max-width: 767px) {
+.introducao {
+	background: url('<?php echo $background_medium[0] ?>') no-repeat center;
+	background-size: cover;
+}
+}
+</style>
 
-  <li class="grid-1-3">
-    <div class="produtos_icone">
-      <img src="img/produtos/retro.png" alt="Bikcraft Retrô">
-    </div>
-    <h3>Retrô</h3>
-    <p>O passado volta para lembrarmos o que devemos fazer no futuro.</p>
-  </li>
+		<section class="introducao">
+			<div class="container">
+				<h1><?php the_field('titulo_introducao'); ?></h1>
+				<blockquote class="quote-externo">
+					<p><?php the_field('quote_introducao'); ?></p>
+					<cite><?php the_field('citacao_introducao'); ?></cite>
+				</blockquote>
+				<a href="/bikcraft/produtos/" class="btn">Orçamento</a>
+			</div>
+		</section>
+		
+		<section class="produtos container animar">
+			<h2 class="subtitulo">Produtos</h2>
+			<ul class="produtos_lista">
 
-</ul>
+				<?php
+					$args = array (
+							'post_type' => 'produtos',
+							'order'   => 'ASC'
+						);
+						$the_query = new WP_Query ( $args );
+				?>
 
-<div class="call">
-  <p>clique aqui e veja os detalhes dos produtos</p>
-  <a href="produtos.html" class="btn btn-preto">Produtos</a>
-</div>
+				<?php if ( $the_query->have_posts() ) : while ( $the_query->have_posts() ) : $the_query->the_post(); ?>
 
-</section>
-<!-- Fecha Produtos -->
+				<li class="grid-1-3">
+					<a href="<?php the_permalink(); ?>">
+					<div class="produtos_icone">
+						<img src="<?php the_field('icone_produto'); ?>" alt="Bikcraft Passeio">
+					</div>
+					<h3><?php the_title(); ?></h3>
+					<p><?php the_field('resumo_produto'); ?></p>
+					</a>
+				</li>
 
-<section class="portfolio">
-<div class="container">
-  <h2 class="subtitulo">Portfólio</h2>
-  <div class="portfolio_lista">
-    <div class="grid-8"><img src="img/portfolio/retro.jpg" alt="Bicicleta Retrô"></div>
-    <div class="grid-8"><img src="img/portfolio/passeio.jpg" alt="Bicicleta Passeio"></div>
-    <div class="grid-16"><img src="img/portfolio/esporte.jpg" alt="Bicicleta Esporte"></div>
-  </div>
-  <div class="call">
-    <p>conheça mais o nosso portfólio</p>
-    <a href="portfolio.html" class="btn">Portfólio</a>
-  </div>
-</div>
-</section>
+				<?php endwhile; else: endif; ?>
+				<?php wp_reset_query(); wp_reset_postdata(); ?>
+			</ul>
 
-<section class="qualidade container">
-<h2 class="subtitulo">Qualidade</h2>
-<img src="img/bikcraft-qualidade.png" alt="Bikcraft">
-<ul class="qualidade_lista">
-  <li class="grid-1-3">
-    <h3>Durabilidade</h3>
-    <p>Sólida como pedra, leve como o vento e resistente como o diamante, são nossos diferenciais.</p>
-  </li>
-  <li class="grid-1-3">
-    <h3>Design</h3>
-    <p>Feitas sob medida para o melhor conforto e eficiência. Adaptamos a sua Bikcraft para o seu corpo.</p>
-  </li>
-  <li class="grid-1-3">
-    <h3>Sustentabilidade</h3>
-    <p>Além de ajudar a cuidar do meio ambiente, tirando carros da rua, toda a produção é sustentável.</p>
-  </li>
-</ul>
-<div class="call">
-  <p>conheça mais a nossa história</p>
-  <a href="sobre.html" class="btn btn-preto">Sobre</a>
-</div>
-</section>
+			<div class="call">
+				<p><?php the_field('chamada_produtos'); ?></p>
+				<a href="/bikcraft/produtos/" class="btn btn-preto">Produtos</a>
+			</div>
+
+		</section>
+
+		<section class="portfolio">
+			<div class="container">
+				<h2 class="subtitulo">Portfólio</h2>
+				<?php include(TEMPLATEPATH . "/inc/clientes-portfolio.php"); ?>
+			</div>
+		</section>
+
+		<?php include(TEMPLATEPATH . "/inc/qualidade.php"); ?>
+<?php endwhile; else: endif; ?>
+
+<?php get_footer(); ?>
